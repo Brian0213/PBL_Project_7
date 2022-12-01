@@ -1,8 +1,8 @@
-## Documentation for Project 7: DEVOPS TOOLING WEBSITE SOLUTION
+# Documentation for Project 7: DEVOPS TOOLING WEBSITE SOLUTION
 
 - As a member of a DevOps team, you will implement a tooling website solution which makes access to DevOps tools within the corporate infrastructure easily accessible.
 
-**Preparing prerequisites**
+## Preparing prerequisites
 
 - For this project, the following components will be implemented:
 - Infrastructure: AWS
