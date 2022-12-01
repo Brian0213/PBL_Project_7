@@ -22,7 +22,7 @@
 
 `lsblk`
 
-![lsblk Status](./image/lsblk-status.PNG)
+![lsblk Status](./images/lsblk-status.PNG)
 
 - Use gdisk utility to create a single partition on each of the 3 disks:
 
@@ -48,103 +48,103 @@ The output should display as :
 
 - Do you want to proceed? (Y/N): Y to confirm
 
-![Xvdf Partition Output](./image/xvdf-part1-output.PNG)
+![Xvdf Partition Output](./images/xvdf-part1-output.PNG)
 
-![Xvdg Partition Output](./image/xvdg-part1-outpu.PNG)
+![Xvdg Partition Output](./images/xvdg-part1-outpu.PNG)
 
-![Xvdh Partition Output](./image/xvdh-part1-outpu.PNG)
+![Xvdh Partition Output](./images/xvdh-part1-outpu.PNG)
 
 - Use lsblk utility to view the newly configured partition on each of the 3 disks.
 
 `lsblk`
 
-![lsblk New Status](./image/lsblk-new-output.PNG)
+![lsblk New Status](./images/lsblk-new-output.PNG)
 
 - Install lvm2 package using sudo yum install lvm2. Run sudo lvmdiskscan command to check for available partitions:
 
 `sudo yum install lvm2 -y`
 
-![Lvm2 Status](./image/lvm2-install-status.PNG)
+![Lvm2 Status](./images/lvm2-install-status.PNG)
 
 - To confirm lvm is install:
 
 `which lvm`
 
-![Lvm Status](./image/lvm-success.PNG)
+![Lvm Status](./images/lvm-success.PNG)
 
 - To check for available partition:
 
 `sudo lvmdiskscan`
 
-![Lvmdiskscan Status](./image/lvmdiskscan-status.PNG)
+![Lvmdiskscan Status](./images/lvmdiskscan-status.PNG)
 
 - Use pvcreate utility to mark each of 3 disks as physical volumes (PVs) to be used by LVM:
 
 `sudo pvcreate /dev/xvdf1 /dev/xvdg1 /dev/xvdh1`
 
-![Pvcreate Physical Volumes](./image/pvcreate-volume-output.PNG)
+![Pvcreate Physical Volumes](./images/pvcreate-volume-output.PNG)
 
 - Check the pvcreate status:
 
 `sudo pvs`
 
-![Sudo Pvs Check](./image/sudo-pvs-output.PNG)
+![Sudo Pvs Check](./images/sudo-pvs-output.PNG)
 
 - Use vgcreate utility to add all 3 PVs to a volume group (VG). Name the VG webdata-vg:
 
 `sudo vgcreate webdata-vg /dev/xvdf1 /dev/xvdg1 /dev/xvdh1`
 
-![Vgcreate Output](./image/vgcreate-output.PNG)
+![Vgcreate Output](./images/vgcreate-output.PNG)
 
 - Verify that your VG has been created successfully by running:
 
 `sudo vgs`
 
-![Vgs Check](./image/vgs-output.PNG)
+![Vgs Check](./images/vgs-output.PNG)
 
 - Use lvcreate utility to create 2 logical volumes. apps-lv (Use half of the PV size), and logs-lv Use the remaining space of the PV size. NOTE: apps-lv will be used to store data for the Website while, logs-lv will be used to store data for logs:
 
 `sudo lvcreate -n lv-apps -L 9G webdata-vg`
 
-![Vgs lv-apps](./image/lv-apps-output.PNG)
+![Vgs lv-apps](./images/lv-apps-output.PNG)
 
 `sudo lvcreate -n lv-logs -L 9G webdata-vg`
 
-![Vgs lv-los](./image/lv-logs-output.PNG)
+![Vgs lv-los](./images/lv-logs-output.PNG)
 
 `sudo lvcreate -n lv-opt -L 9G webdata-vg`
 
-![Vgs lv-opt](./image/lv-opt-output.PNG)
+![Vgs lv-opt](./images/lv-opt-output.PNG)
 
 - Verify that your Logical Volume has been created successfully by running:
 
 `sudo lvs`
 
-![Sudo Lvs Output](./image/sudo-lvs-status.PNG)
+![Sudo Lvs Output](./images/sudo-lvs-status.PNG)
 
 `lsblk`
 
-![lsblk New Status](./image/check-attach-status.PNG)
+![lsblk New Status](./images/check-attach-status.PNG)
 
 - Run the command below to display the packages created:
 
 `sudo vgdisplay -v #view complete setup - VG, PV, and LV`
 
-![View Complete Output](./image/entire-output.PNG)
+![View Complete Output](./images/entire-output.PNG)
 
 - Use mkfs.xfs to format the logical volumes with ext4 filesystem:
 
 `sudo mkfs -t xfs /dev/webdata-vg/lv-apps`
 
-![Mkfs Lvapps Output](./image/mkfs-lv-apps-output.PNG)
+![Mkfs Lvapps Output](./images/mkfs-lv-apps-output.PNG)
 
 `sudo mkfs -t xfs /dev/webdata-vg/lv-logs`
 
-![Mkfs Lvlogs Output](./image/mkfs-lv-logs-output.PNG)
+![Mkfs Lvlogs Output](./images/mkfs-lv-logs-output.PNG)
 
 `sudo mkfs -t xfs /dev/webdata-vg/lv-opt`
 
-![Mkfs Lvopt Output](./image/mkfs-lv-opt-output.PNG)
+![Mkfs Lvopt Output](./images/mkfs-lv-opt-output.PNG)
 
 - Create mount points on /mnt directory for the logical volumes as follow:
 
@@ -154,41 +154,41 @@ The output should display as :
 
 `sudo mkdir /mnt/opt`
 
-![Create Mount Output](./image/create-mount-outputs.PNG)
+![Create Mount Output](./images/create-mount-outputs.PNG)
 
 - To mount the 3 volumes:
 
 `sudo mount /dev/webdata-vg/lv-apps /mnt/apps`
 
-![Lv-apps Mount Output](./image/lvapps-success.PNG)
+![Lv-apps Mount Output](./images/lvapps-success.PNG)
 
 `sudo mount /dev/webdata-vg/lv-logs /mnt/logs`
 
-![Lv-logs Mount Output](./image/lvlogs-success.PNG)
+![Lv-logs Mount Output](./images/lvlogs-success.PNG)
 
 `sudo mount /dev/webdata-vg/lv-opt /mnt/opt`
 
-![Lv-opt Mount Output](./image/lvopt-success.PNG)
+![Lv-opt Mount Output](./images/lvopt-success.PNG)
 
 - Install NFS server, configure it to start on reboot and make sure it is u and running:
 
 `sudo yum -y update`
 
-![Yum Update](./image/yum-success.PNG)
+![Yum Update](./images/yum-success.PNG)
 
 `sudo yum install nfs-utils -y`
 
-![Yum Update](./image/nfs-utils-success.PNG)
+![Yum Update](./images/nfs-utils-success.PNG)
 
 `sudo systemctl start nfs-server.service`
 
 `sudo systemctl enable nfs-server.service`
 
-![Nfs Server Enable](./image/nfs-enable-success.PNG)
+![Nfs Server Enable](./images/nfs-enable-success.PNG)
 
 `sudo systemctl status nfs-server.service`
 
-![Nfs Server Active](./image/nfs-active-success.PNG)
+![Nfs Server Active](./images/nfs-active-success.PNG)
 
 - Make sure we set up permission that will allow our Web servers to read, write and execute files on NFS:
 
@@ -198,7 +198,7 @@ The output should display as :
 
 `sudo chown -R nobody: /mnt/opt`
 
-![Chown Commands](./image/chown-mnt-output.PNG)
+![Chown Commands](./images/chown-mnt-output.PNG)
 
 `sudo chmod -R 777 /mnt/apps`
 
@@ -206,7 +206,7 @@ The output should display as :
 
 `sudo chmod -R 777 /mnt/opt`
 
-![Chmod Commands](./image/chmod-mnt-output.PNG)
+![Chmod Commands](./images/chmod-mnt-output.PNG)
 
 - Restart the Nfs server:
 
@@ -216,21 +216,21 @@ The output should display as :
 
 `sudo vi /etc/exports`
 
-![Vi Etc Export](./image/export-output.PNG)
+![Vi Etc Export](./images/export-output.PNG)
 
 `sudo exportfs -arv`
 
-![Export Success](./image/export-success.PNG)
+![Export Success](./images/export-success.PNG)
 
 - Check which port is used by NFS and open it using Security Groups (add new Inbound Rule):
 
 `rpcinfo -p | grep nfs`
 
-![Port Output](./image/port-output.PNG)
+![Port Output](./images/port-output.PNG)
 
 - Important note: In order for NFS server to be accessible from your client, you must also open following ports: TCP 111, UDP 111, UDP 2049:
 
-![Security Group Output](./image/security-group-output.PNG)
+![Security Group Output](./images/security-group-output.PNG)
 
 STEP 2 — CONFIGURE THE DATABASE SERVER
 
@@ -242,45 +242,45 @@ STEP 2 — CONFIGURE THE DATABASE SERVER
 
 `sudo apt install mysql-server`
 
-![Lv-opt Mount Output](./image/install-mysqlserver-success.PNG)
+![Lv-opt Mount Output](./images/install-mysqlserver-success.PNG)
 
 - Create a database and name it tooling:
 
 `sudo mysql`
 
-![Mysql launch](./image/mysql-output.PNG)
+![Mysql launch](./images/mysql-output.PNG)
 
 - Create a database named tooling:
 
-![Create Tooling Database](./image/tooling-db-created.PNG)
+![Create Tooling Database](./images/tooling-db-created.PNG)
 
 `create database tooling;`
 
-![Create Tooling Database](./image/tooling-db-created.PNG)
+![Create Tooling Database](./images/tooling-db-created.PNG)
 
 - Create a user in the database:
 
 `create user 'webaccess'@'172.31.32.0/20' identified by 'password';`
 
-![User Created](./image/user-create-status.PNG)
+![User Created](./images/user-create-status.PNG)
 
 - Grant permission to webaccess user on tooling database:
 
 `grant all privileges on tooling.* to 'webaccess'@'172.31.32.0/20';`
 
-![Grant Privileges](./image/grant-privilege-output.PNG)
+![Grant Privileges](./images/grant-privilege-output.PNG)
 
 - Flush privileges:
 
 `flush privileges;`
 
-![Flush Privileges](./image/flush-output.PNG)
+![Flush Privileges](./images/flush-output.PNG)
 
 - Show databases:
 
 `show databases;`
 
-![Show Databases](./image/show-db-output.PNG)
+![Show Databases](./images/show-db-output.PNG)
 
 Step 3 — Prepare the Web Servers
 
@@ -295,23 +295,23 @@ This approach will make our Web Servers stateless, which means we will be able t
 
 `sudo yum install nfs-utils nfs4-acl-tools -y`
 
-![Nfs Install](./image/nfs-install-success.PNG)
+![Nfs Install](./images/nfs-install-success.PNG)
 
 - Mount /var/www/ and target the NFS server’s export for apps:
 
 `sudo mkdir /var/www`
 
-![Var WWW](./image/mkdir-www.PNG)
+![Var WWW](./images/mkdir-www.PNG)
 
 `sudo mount -t nfs -o rw,nosuid <NFS-Server-Private-IP-Address>:/mnt/apps /var/www`
 
-![Mount](./image/success.PNG)
+![Mount](./images/success.PNG)
 
 - Verify that NFS was mounted successfully by running df -h. Make sure that the changes will persist on Web Server after reboot:
 
 `df -h`
 
-![Mount](./image/df-h-success.PNG)
+![Mount](./images/df-h-success.PNG)
 
 - To show connect between the webserver1 and nfs server:
 
@@ -325,7 +325,7 @@ This approach will make our Web Servers stateless, which means we will be able t
 
 - You should get this output:
 
-![Webserver Nfs Connection](./image/webserver-nfs-connect-success.PNG)
+![Webserver Nfs Connection](./images/webserver-nfs-connect-success.PNG)
 
 - Make sure that the changes will persist on Web Server after reboot:
 
@@ -335,29 +335,29 @@ This approach will make our Web Servers stateless, which means we will be able t
 
 `<NFS-Server-Private-IP-Address>:/mnt/apps /var/www nfs defaults 0 0`
 
-![Webserver Nfs Connection](./image/fstab-output.PNG)
+![Webserver Nfs Connection](./images/fstab-output.PNG)
 
 - Install Remi’s repository, Apache and PHP:
 
 `sudo yum install httpd -y`
 
-![Apache Installation](./image/apache-success.PNG)
+![Apache Installation](./images/apache-success.PNG)
 
 `sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm`
 
-![Epel Installation](./image/epel-success.PNG)
+![Epel Installation](./images/epel-success.PNG)
 
 `sudo dnf install dnf-utils http://rpms.remirepo.net/enterprise/remi-release-8.rpm`
 
-![Remirepo Installation](./image/remirepo-success.PNG)
+![Remirepo Installation](./images/remirepo-success.PNG)
 
 `sudo dnf module reset php`
 
-![Php Module Reset](./image/php-reset-success.PNG)
+![Php Module Reset](./images/php-reset-success.PNG)
 
 `sudo dnf module enable php:remi-7.4`
 
-![Php Enable](./image/php-enable-success.PNG)
+![Php Enable](./images/php-enable-success.PNG)
 
 `sudo dnf install php php-opcache php-gd php-curl php-mysqlnd`
 
@@ -367,15 +367,15 @@ This approach will make our Web Servers stateless, which means we will be able t
 
 `sudo systemctl enable php-fpm`
 
-![Php Start Enable](./image/php-start-enable-success.PNG)
+![Php Start Enable](./images/php-start-enable-success.PNG)
 
 `sudo systemctl status php-fpm`
 
-![Php Status](./image/php-status-success.PNG)
+![Php Status](./images/php-status-success.PNG)
 
 `sudo setsebool -P httpd_execmem 1`
 
-![Setse Bool](./image/setsebool-output.PNG)
+![Setse Bool](./images/setsebool-output.PNG)
 
 - Repeat steps 290 - 376 for Webservers 2 & 3.
 
@@ -383,29 +383,29 @@ This approach will make our Web Servers stateless, which means we will be able t
 
 `ls /var/www` in the webserver
 
-![ls Var Www](./image/ls-var-www-output.PNG)
+![ls Var Www](./images/ls-var-www-output.PNG)
 
 `ls /mnt/apps` in the nfs server
 
-![ls Mnt Apps](./image/ls-mnt-apps-output.PNG)
+![ls Mnt Apps](./images/ls-mnt-apps-output.PNG)
 
 - Locate the log folder for Apache on the Web Server and mount it to NFS server’s export for logs
 
 `ls /var/log` 
 
-![Apache Folder on Webserver](./image/apache-folder-webserver.PNG)
+![Apache Folder on Webserver](./images/apache-folder-webserver.PNG)
 
 - Repeat steps №310, 330 & 334 to make sure the mount point will persist after reboot:
 
 `sudo mount -t nfs -o rw,nosuid 172.31.44.17:/mnt/logs /var/log/httpd` 
 
-![Mount Success](./image/mount-output.PNG)
+![Mount Success](./images/mount-output.PNG)
 
 - Make sure that the changes will persist on Web Server after reboot:
 
 `sudo vi /etc/fstab`
 
-![Mount Success](./image/etc-fstab-update.PNG)
+![Mount Success](./images/etc-fstab-update.PNG)
 
 - Fork the tooling source code from Darey.io Github Account to your Github account. (Learn how to fork a repo here)
 
@@ -413,25 +413,25 @@ This approach will make our Web Servers stateless, which means we will be able t
 
 `sudo yum install git`
 
-![Git Install](./image/git-install-success.PNG)
+![Git Install](./images/git-install-success.PNG)
 
 - Run the command:
 
 `git init`
 
-![Git Init Install](./image/git-init-success.PNG)
+![Git Init Install](./images/git-init-success.PNG)
 
 - To fork the repo:
 
 `git clone https://github.com/darey-io/tooling.git`
 
-![Git Clone ](./image/git-clone-success.PNG)
+![Git Clone ](./images/git-clone-success.PNG)
 
 - Run the ls command to confirm the clone:
 
 `ls`
 
-![Tooling Clone ](./image/tooling-success.PNG)
+![Tooling Clone ](./images/tooling-success.PNG)
 
 - Change the directory to tooling and run ls:
 
@@ -439,7 +439,7 @@ This approach will make our Web Servers stateless, which means we will be able t
 
 `ls`
 
-![Tooling Clone ](./image/cd-tooling-ls-output.PNG)
+![Tooling Clone ](./images/cd-tooling-ls-output.PNG)
 
 - Ensure that the html folder from the repository is deployed to /var/www/html:
 
@@ -447,17 +447,17 @@ Copy the html folder inside the tooling folder to the /var/www:
 
 `sudo cp -R html/. /var/www/html`
 
-![Copy Success](./image/copy-output.PNG)
+![Copy Success](./images/copy-output.PNG)
 
 - To confirm the copy was successful:
 
 `ls /var/www/html`
 
-![Copy Success](./image/www-html-success.PNG)
+![Copy Success](./images/www-html-success.PNG)
 
 `ls html`
 
-![Copy Success](./image/www-html-success.PNG)
+![Copy Success](./images/www-html-success.PNG)
 
 - If you encounter 403 Error – check permissions to your /var/www/html folder and also disable SELinux sudo setenforce 0
 
@@ -469,13 +469,13 @@ Copy the html folder inside the tooling folder to the /var/www:
 
 `sudo setenforce 0`
 
-![Set Enforce](./image/set-enforce.PNG)
+![Set Enforce](./images/set-enforce.PNG)
 
 - To make this change permanent – open following config file sudo vi /etc/sysconfig/selinux and set SELINUX=disabledthen restrt httpd:
 
 `sudo vi /etc/sysconfig/selinux`
 
-![Selinux Set](./image/selinux-disable-output.PNG)
+![Selinux Set](./images/selinux-disable-output.PNG)
 
 - Start the httpd:
 
@@ -483,19 +483,19 @@ Copy the html folder inside the tooling folder to the /var/www:
 
 `sudo systemctl status httpd`
 
-![Selinux Set](./image/start-status-httpd.PNG)
+![Selinux Set](./images/start-status-httpd.PNG)
 
 - Update the website’s configuration to connect to the database (in /var/www/html/functions.php file):
 
 `sudo vi /var/www/html/functions.php`
 
-![Selinux Set](./image/php-update-with-user-cred.PNG)
+![Selinux Set](./images/php-update-with-user-cred.PNG)
 
 - Change bindaddress in the database server:
 
 `sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf`
 
-![Bind Address Change](./image/bind-address-change.PNG)
+![Bind Address Change](./images/bind-address-change.PNG)
 
 - Restart and check status My sql:
 
@@ -503,13 +503,13 @@ Copy the html folder inside the tooling folder to the /var/www:
 
 `sudo systemctl status mysql`
 
-![Restart and Status ](./image/restart-status-output.PNG)
+![Restart and Status ](./images/restart-status-output.PNG)
 
 - Apply tooling-db.sql script to your database using this command mysql -h <database-private-ip> -u <db-username> -p <db-pasword> < tooling-db.sql:
 
 `mysql -h 172.31.41.255 -u webaccess -p tooling < tooling-db.sql`
 
-![Logging Output](./image/logging-output.PNG)
+![Logging Output](./images/logging-output.PNG)
 
 - Go to the Database server and show databases in mysql
 
@@ -517,19 +517,19 @@ Copy the html folder inside the tooling folder to the /var/www:
 
 `show databases;`
 
-![Tooling](./image/show-db.PNG)
+![Tooling](./images/show-db.PNG)
 
 `use tooling;`
 
-![Database Change](./image/DB-change.PNG)
+![Database Change](./images/DB-change.PNG)
 
 `show tables;`
 
-![Show Tables](./image/show-tables.PNG)
+![Show Tables](./images/show-tables.PNG)
 
 `select * from users;`
 
-![Query Tables](./image/query-table.PNG)
+![Query Tables](./images/query-table.PNG)
 
 - Open the website in your browser http://<Web-Server-Public-IP-Address-or-Public-DNS-Name>/index.php and make sure you can login into the websute with myuser user:
 
@@ -537,6 +537,6 @@ Copy the html folder inside the tooling folder to the /var/www:
 
 [Webserver Url](http://3.145.23.181/admin_tooling.php)
 
-![Webserver launch Success](./image/admin-login-1.PNG)
+![Webserver launch Success](./images/admin-login-1.PNG)
 
-![Webserver launch Success](./image/admin-login-2.PNG)
+![Webserver launch Success](./images/admin-login-2.PNG)
